@@ -46,6 +46,15 @@ class Database(object):
         except MySQLdb.Error, e:
             print e.args
             print "ERROR: %d: %s" % (e.args[0], e.args[1])
+
+    def delete(self,sql):
+        try:
+            self.cursor.execute(sql)
+            self.db_connect.commit()
+        except MySQLdb.Error, e:
+            print e.args
+            print "ERROR: %d: %s" % (e.args[0], e.args[1])
+
  
     def __del__(self):
 #         Close cursor
@@ -57,12 +66,14 @@ class Database(object):
         print 'Database connection closed'
 
     def get_dump(self):
-        #import subprocess
+        import subprocess
         #print subprocess.Popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup12.sql",shell=True)
         #dumpcmd = "mysqldump -u " + 'root' + " -p" + '' + " " + 'pythontest' + " > " + './' + "/" + 'pythontest' + ".sql"
         #os.system(dumpcmd)
         try:
-            os.popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql")
+            #os.popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql")
+            subprocess.call("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql",shell=True)
+            #subprocess.call(["mysqldump", "-u root -h 127.0.0.1 -P 3306 pythontest | backup.sql"],shell=True)
         except Exception as e:
             print e
             
@@ -74,10 +85,18 @@ class Database(object):
         #print os.popen("mysqldump -u root --h 127.0.0.1 pythontest > wikidb.sql")
         #print "\n-- please have a the dump file in "+self.__database+"_"+filestamp+".gz --"
         
-
+    def get_dictionary(self, table='orders'):
+        import MySQLdb.cursors
+        conn = MySQLdb.connect(host=self.__host, port=self.__port, user=self.__user, passwd=self.__password, db=self.__database, cursorclass=MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * from {}".format(table))
+        return cursor.fetchall()
+        
 def main():
     db = Database(name='pythontest')
     db.get_dump()
+    print db.get_dictionary()
+    
 # Create Table Customers
     sql = """
             CREATE TABLE IF NOT EXISTS customers(
@@ -140,8 +159,14 @@ def main():
     """
     db.insert(sql)
 
-   
+#   Delete database
+    sql = """
+            DROP DATABASE pythontest
+    """
+    #db.delete(sql)
 
+
+    
     #print db
 
 
