@@ -38,8 +38,25 @@ class Database(object):
 #         Close DB
         self.db_connect.close()
         print 'Database connection closed'
-        
+
+def main():
+    db = Database()
+# Create Table Customers
+    sql = """
+            CREATE TABLE IF NOT EXISTS customers(
+                id int NOT NULL AUTO_INCREMENT,
+                first_name  VARCHAR(50),
+                last_name   VARCHAR(50),
+                phone       VARCHAR(15),
+                email       VARCHAR(100),
+                address     VARCHAR(150),
+                country     VARCHAR(30),
+                PRIMARY KEY(id)
+            )
+    """
+    db.request(sql)
+    print db
 
 
-db = Database()
-print db
+if __name__ == '__main__':
+    main()    
