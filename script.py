@@ -1,5 +1,7 @@
 import MySQLdb
 import sys
+import time
+import os
 
 
 class Database(object):
@@ -50,12 +52,32 @@ class Database(object):
         if self.cursor:
             self.cursor.close ()
 #         Close DB
-        if self.db:
+        if self.db_connect:
             self.db_connect.close()
         print 'Database connection closed'
 
+    def get_dump(self):
+        #import subprocess
+        #print subprocess.Popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup12.sql",shell=True)
+        #dumpcmd = "mysqldump -u " + 'root' + " -p" + '' + " " + 'pythontest' + " > " + './' + "/" + 'pythontest' + ".sql"
+        #os.system(dumpcmd)
+        try:
+            os.popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql")
+        except Exception as e:
+            print e
+            
+        #filestamp = time.strftime('%Y-%m-%d-%I:%M')
+        #print os.popen("mysqldump -u %s -p%s -h %s -e --opt -c %s | gzip -c > %s.gz" % (self.__user,'',self.__host,self.__database,self.__database+"_"+filestamp))
+
+        #print os.popen("mysqldump -P 3306 -u root -h 127.0.0.1 pythontest1 > db_backup.sql")
+        #print os.popen("mysqldump --help").read()
+        #print os.popen("mysqldump -u root --h 127.0.0.1 pythontest > wikidb.sql")
+        #print "\n-- please have a the dump file in "+self.__database+"_"+filestamp+".gz --"
+        
+
 def main():
     db = Database(name='pythontest')
+    db.get_dump()
 # Create Table Customers
     sql = """
             CREATE TABLE IF NOT EXISTS customers(
@@ -118,8 +140,12 @@ def main():
     """
     db.insert(sql)
 
+   
 
-    print db
+    #print db
+
+
+
 
 
 if __name__ == '__main__':
