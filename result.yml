@@ -1,0 +1,11 @@
+!!python/tuple
+- customer_id: !!python/long '1'
+  id: !!python/long '1'
+  price: 35.55
+  product_id: !!python/long '1'
+  quantity: !!python/long '25'
+- customer_id: !!python/long '1'
+  id: !!python/long '2'
+  price: 45.0
+  product_id: !!python/long '2'
+  quantity: !!python/long '12'

@@ -91,11 +91,18 @@ class Database(object):
         cursor = conn.cursor()
         cursor.execute("SELECT * from {}".format(table))
         return cursor.fetchall()
+
+    def dictionary_to_yaml(self):
+        import yaml
+        data = self.get_dictionary()
+        print data
+        with open('result.yml', 'w') as yaml_file:
+            yaml_file.write( yaml.dump(data, default_flow_style=False))
         
 def main():
     db = Database(name='pythontest')
     db.get_dump()
-    print db.get_dictionary()
+    print db.dictionary_to_yaml()
     
 # Create Table Customers
     sql = """
