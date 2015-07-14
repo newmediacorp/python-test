@@ -65,6 +65,12 @@ def main():
                 PRIMARY KEY(id) )
     """
     db.request(sql)
+# Create Table Orders
+    sql = """
+            CREATE TABLE IF NOT EXISTS orders(
+                
+            )
+    """
     
     
     print db
