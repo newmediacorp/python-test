@@ -7,9 +7,22 @@ class Database(object):
     __user = 'root'
     __password = ''
     __port = 3306
-    __database = 'test'
+    __database = None
 
-    def __init__(self):
+    def __init__(self,name):
+#       create DB if Not Exists
+        try:
+            self.db_connect = MySQLdb.connect(host=self.__host, port=self.__port, user=self.__user, passwd=self.__password)
+#           create cursor
+            self.cursor = self.db_connect.cursor()
+            self.request("CREATE DATABASE IF NOT EXISTS {}".format(name))
+            self.__database = name
+        except MySQLdb.Error, e:
+            print e.args
+            print 'ERROR: %d: %s' % (e.args[0], e.args[1])
+            sys.exit(1)
+
+        
 #       create DB connection
         try:
             self.db_connect = MySQLdb.connect(host=self.__host, port=self.__port, user=self.__user, passwd=self.__password, db=self.__database)
@@ -34,13 +47,15 @@ class Database(object):
  
     def __del__(self):
 #         Close cursor
-        self.cursor.close ()
+        if self.cursor:
+            self.cursor.close ()
 #         Close DB
-        self.db_connect.close()
+        if self.db:
+            self.db_connect.close()
         print 'Database connection closed'
 
 def main():
-    db = Database()
+    db = Database(name='pythontest')
 # Create Table Customers
     sql = """
             CREATE TABLE IF NOT EXISTS customers(
@@ -68,11 +83,42 @@ def main():
 # Create Table Orders
     sql = """
             CREATE TABLE IF NOT EXISTS orders(
-                
+                id int NOT NULL AUTO_INCREMENT,
+                customer_id INT(11),
+                product_id INT(11),
+                quantity INT(11),
+                price FLOAT(11,2),
+                PRIMARY KEY(customer_id, product_id),
+                KEY(id)
             )
     """
+    db.request(sql)
+# INSERTING DUMMY DATA FOR TABLES customers, products, orders
+    sql = """
+            INSERT INTO customers(first_name, last_name, phone, email, address, country)
+            VALUES
+                ('Goren', 'AngelKovski', '38971371213', 'info@newmediacorp.com', 'Bitola, Fyro', 'Macedonia'),
+                ('Nawazish', 'Qadir', '923314133340', 'nawazish@gmail.com', 'Dera Ghazi Khan', 'Pakistan');
+    """
+    db.insert(sql)
     
+    sql = """
+            INSERT INTO products(name, price, description)
+            VALUES
+                ('Facial Skin Care', 5.0, 'Awesome product to use for facial.'),
+                ('Synology Storage', 25.0, 'Product with storing network attached data.');
+    """
+    db.insert(sql)
     
+    sql = """
+            INSERT INTO orders(customer_id, product_id, quantity, price)
+            VALUES
+                (1, 1, 25, 35.55),
+                (1, 2, 12, 45);
+    """
+    db.insert(sql)
+
+
     print db
 
 
