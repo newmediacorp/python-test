@@ -55,6 +55,18 @@ def main():
             )
     """
     db.request(sql)
+# Create Table Products
+    sql = """
+            CREATE TABLE IF NOT EXISTS products(
+                id int NOT NULL AUTO_INCREMENT,
+                name        VARCHAR(50),
+                price       FLOAT(11,2),
+                description TEXT,
+                PRIMARY KEY(id) )
+    """
+    db.request(sql)
+    
+    
     print db
 
 
