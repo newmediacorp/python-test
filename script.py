@@ -2,7 +2,7 @@ import MySQLdb
 import sys
 import time
 import os
-
+import subprocess
 
 class Database(object):
     __host = '127.0.0.1'
@@ -72,24 +72,19 @@ class Database(object):
         print 'Database connection closed'
 
     def get_dump(self):
-        import subprocess
-        #print subprocess.Popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup12.sql",shell=True)
-        #dumpcmd = "mysqldump -u " + 'root' + " -p" + '' + " " + 'pythontest' + " > " + './' + "/" + 'pythontest' + ".sql"
-        #os.system(dumpcmd)
+        
         try:
-            #os.popen("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql")
             subprocess.call("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql",shell=True)
-            #subprocess.call(["mysqldump", "-u root -h 127.0.0.1 -P 3306 pythontest | backup.sql"],shell=True)
+        except Exception as e:
+            print e
+
+    def restore(self):
+        try:
+            subprocess.call("mysql -u root -h 127.0.0.1 -P 3306 test < backup.sql",shell=True)
+            print "after mysql"
         except Exception as e:
             print e
             
-        #filestamp = time.strftime('%Y-%m-%d-%I:%M')
-        #print os.popen("mysqldump -u %s -p%s -h %s -e --opt -c %s | gzip -c > %s.gz" % (self.__user,'',self.__host,self.__database,self.__database+"_"+filestamp))
-
-        #print os.popen("mysqldump -P 3306 -u root -h 127.0.0.1 pythontest1 > db_backup.sql")
-        #print os.popen("mysqldump --help").read()
-        #print os.popen("mysqldump -u root --h 127.0.0.1 pythontest > wikidb.sql")
-        #print "\n-- please have a the dump file in "+self.__database+"_"+filestamp+".gz --"
         
     def get_dictionary(self, table='orders'):
         import MySQLdb.cursors
@@ -101,6 +96,8 @@ class Database(object):
     def dictionary_to_yaml(self):
         import yaml
         data = self.get_dictionary()
+        #dt = [v for k,v in d for d in data]
+        #print dt
         print data
         with open('result.yml', 'w') as yaml_file:
             yaml_file.write( yaml.dump(data, default_flow_style=False))
@@ -108,6 +105,12 @@ class Database(object):
 def main():
     db = Database(name='pythontest')
     db.get_dump()
+    db.restore()
+    q = raw_input("Do You want to create New Database?")
+    if q.lower() == 'yes':
+        name = raw_input("Please enter the Database name:")
+        db = Database(name)
+    
     print db.dictionary_to_yaml()
     
 # Create Table Customers
@@ -190,9 +193,6 @@ def main():
     """
     #db.delete(sql)
 
-
-    
-    #print db
 
 
 
