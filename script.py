@@ -4,6 +4,12 @@ import time
 import os
 import subprocess
 
+############# Removing database warnings #############
+from warnings import filterwarnings
+import MySQLdb as Database
+filterwarnings('ignore', category = Database.Warning)
+
+
 class Database(object):
     __host = '127.0.0.1'
     __user = 'root'
@@ -80,8 +86,7 @@ class Database(object):
 
     def restore(self):
         try:
-            subprocess.call("mysql -u root -h 127.0.0.1 -P 3306 test < backup.sql",shell=True)
-            print "after mysql"
+            subprocess.call("mysql -u root -h 127.0.0.1 -P 3306 test < backup.sql",shell=True)            
         except Exception as e:
             print e
             
@@ -95,24 +100,29 @@ class Database(object):
 
     def dictionary_to_yaml(self):
         import yaml
-        data = self.get_dictionary()
-        #dt = [v for k,v in d for d in data]
-        #print dt
-        print data
+        data = self.get_dictionary()    
+        orders_list = []
+        
+#       Converting values with L(long) from db to int
+        for dic in data:
+            d = {}
+            for k,v in dic.items():                
+                d[k] = int(dic[k]) if type(dic[k]) == long else dic[k]
+            orders_list.append(d)
+
+#       Writing output to result.yaml file        
         with open('result.yml', 'w') as yaml_file:
-            yaml_file.write( yaml.dump(data, default_flow_style=False))
+            yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
         
 def main():
     db = Database(name='pythontest')
-    db.get_dump()
-    db.restore()
-    q = raw_input("Do You want to create New Database?")
+    
+    q = raw_input("Do You want to create New Database(Yes/No)?")
     if q.lower() == 'yes':
         name = raw_input("Please enter the Database name:")
         db = Database(name)
     
-    print db.dictionary_to_yaml()
-    
+       
 # Create Table Customers
     table = "customers"
     sql = """
@@ -193,10 +203,10 @@ def main():
     """
     #db.delete(sql)
 
+    db.get_dump()
+    db.restore()
 
-
-
-
+    print db.dictionary_to_yaml()
 
 if __name__ == '__main__':
     main()    
