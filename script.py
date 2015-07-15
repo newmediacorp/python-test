@@ -35,10 +35,16 @@ class Database(object):
             print 'ERROR: %d: %s' % (e.args[0], e.args[1])
             sys.exit(1)
 
+    def create(self, sql):
+        try:
+            return self.cursor.execute(sql)
+        except MySQLdb.Error, e:
+            print "ERROR: %d: %s" % (e.args[0], e.args[1])
+    
     def request(self, sql):
         self.cursor.execute(sql)
         self.sqlout = self.cursor.fetchall()
-
+    
     def insert(self,sql):
         try:
             self.cursor.execute(sql)
@@ -105,8 +111,9 @@ def main():
     print db.dictionary_to_yaml()
     
 # Create Table Customers
+    table = "customers"
     sql = """
-            CREATE TABLE IF NOT EXISTS customers(
+            CREATE TABLE IF NOT EXISTS {} (
                 id int NOT NULL AUTO_INCREMENT,
                 first_name  VARCHAR(50),
                 last_name   VARCHAR(50),
@@ -116,21 +123,29 @@ def main():
                 country     VARCHAR(30),
                 PRIMARY KEY(id)
             )
-    """
-    db.request(sql)
+    """.format(table)
+
+    msg = "Table {} Created successfully.".format(table) if db.create(sql) else "Table {} already exists.".format(table)
+    print msg   
+    
 # Create Table Products
+    table = "products"
     sql = """
-            CREATE TABLE IF NOT EXISTS products(
+            CREATE TABLE IF NOT EXISTS {}(
                 id int NOT NULL AUTO_INCREMENT,
                 name        VARCHAR(50),
                 price       FLOAT(11,2),
                 description TEXT,
                 PRIMARY KEY(id) )
-    """
-    db.request(sql)
+    """.format(table)
+    
+    msg = "Table {} Created successfully.".format(table) if db.create(sql) else "Table {} already exists.".format(table)
+    print msg   
+    
 # Create Table Orders
+    table = "orders"
     sql = """
-            CREATE TABLE IF NOT EXISTS orders(
+            CREATE TABLE IF NOT EXISTS {} (
                 id int NOT NULL AUTO_INCREMENT,
                 customer_id INT(11),
                 product_id INT(11),
@@ -139,8 +154,11 @@ def main():
                 PRIMARY KEY(customer_id, product_id),
                 KEY(id)
             )
-    """
-    db.request(sql)
+    """.format(table)
+    
+    msg = "Table {} Created successfully.".format(table) if db.create(sql) else "Table {} already exists.".format(table)
+    print msg
+    
 # INSERTING DUMMY DATA FOR TABLES customers, products, orders
     sql = """
             INSERT INTO customers(first_name, last_name, phone, email, address, country)
