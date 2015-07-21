@@ -3,14 +3,14 @@ import sys
 import time
 import os
 import subprocess
-
+import cmd
 ############# Removing database warnings #############
 from warnings import filterwarnings
 import MySQLdb as Database
 filterwarnings('ignore', category = Database.Warning)
 
 
-class Database(object):
+class Database(cmd.Cmd):
     __host = '127.0.0.1'
     __user = 'root'
     __password = ''
@@ -19,13 +19,14 @@ class Database(object):
     
 
     def get_dictionary(self, table='orders'):
+        print "in get dictionary"
         import MySQLdb.cursors
         conn = MySQLdb.connect(host=self.__host, port=self.__port, user=self.__user, passwd=self.__password, db=self.__database, cursorclass=MySQLdb.cursors.DictCursor)
         cursor = conn.cursor()
         cursor.execute("SELECT * from {}".format(table))
         return cursor.fetchall()
 
-    def dictionary_to_yaml(self):
+    def do_dictionary_to_yaml(self, line):
         import yaml
         data = self.get_dictionary()    
         orders_list = []
@@ -41,10 +42,18 @@ class Database(object):
         with open('./out/orders.yml', 'w') as yaml_file:
           yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
 
+    def do_EOF(self, line):
+        return True
+
 def main():
     d = Database()
-    d.get_dictionary()
-    d.dictionary_to_yaml()
+    #d.do_get_dictionary()
+    d.do_dictionary_to_yaml()
 
 if __name__ == '__main__':
-    main()
+    #main()
+    Database().cmdloop()
+
+
+
+

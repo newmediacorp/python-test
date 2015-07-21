@@ -3,6 +3,7 @@ import sys
 import time
 import os
 import subprocess
+import cmd
 
 ############# Removing database warnings #############
 from warnings import filterwarnings
@@ -10,20 +11,24 @@ import MySQLdb as Database
 filterwarnings('ignore', category = Database.Warning)
 
 
-class Database(object):
+class Database(cmd.Cmd):
   __host = '127.0.0.1'
   __user = 'root'
   __password = ''
   __port = 3306
   __database = None
 
-  def __init__(self,name):
+  def __init__(self,name='pythontest'):
+    #### THIS IS THE LINE YOU FORGOT!!!!
+    #super(Database, self).__init__()
+    cmd.Cmd.__init__(self)
+    #Database.__init__(self)
 #       create DB if Not Exists
     try:
       self.db_connect = MySQLdb.connect(host=self.__host, port=self.__port, user=self.__user, passwd=self.__password)
 #           create cursor
       self.cursor = self.db_connect.cursor()
-      self.request("CREATE DATABASE IF NOT EXISTS {}".format(name))
+      self.do_request("CREATE DATABASE IF NOT EXISTS {}".format(name))
       self.__database = name
     except MySQLdb.Error, e:
       print e.args
@@ -41,17 +46,17 @@ class Database(object):
       print 'ERROR: %d: %s' % (e.args[0], e.args[1])
       sys.exit(1)
 
-  def create(self, sql):
+  def do_create(self, sql):
     try:
       return self.cursor.execute(sql)
     except MySQLdb.Error, e:
       print "ERROR: %d: %s" % (e.args[0], e.args[1])
   
-  def request(self, sql):
+  def do_request(self, sql):
     self.cursor.execute(sql)
     self.sqlout = self.cursor.fetchall()
   
-  def insert(self,sql):
+  def do_insert(self,sql):
     try:
       self.cursor.execute(sql)
       self.db_connect.commit()
@@ -59,7 +64,7 @@ class Database(object):
       print e.args
       print "ERROR: %d: %s" % (e.args[0], e.args[1])
 
-  def delete(self,sql):
+  def do_delete(self,sql):
     try:
       self.cursor.execute(sql)
       self.db_connect.commit()
@@ -77,14 +82,14 @@ class Database(object):
       self.db_connect.close()
     print 'Database connection closed'
 
-  def get_dump(self):
+  def do_get_dump(self, line):
     
     try:
       subprocess.call("mysqldump -u root -h 127.0.0.1 -P 3306 pythontest > backup.sql",shell=True)
     except Exception as e:
       print e
 
-  def restore(self):
+  def do_restore(self, line):
     try:
       subprocess.call("mysql -u root -h 127.0.0.1 -P 3306 yabargoon < backup.sql",shell=True)            
     except Exception as e:
@@ -186,4 +191,5 @@ def main():
 
 
 if __name__ == "__main__":
-  main()    
+  #main()
+  Database().cmdloop()
