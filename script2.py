@@ -71,7 +71,7 @@ class Database(cmd.Cmd):
         # now we are one commit ahead
         print repo.git.status()
         #finally pushing the code
-        repo.push()
+        repo.git.push()
         
 
     def do_EOF(self, line):
