@@ -57,22 +57,16 @@ class Database(cmd.Cmd):
     def do_deploy(self, line):
         import git
 
-        repo_dir = os.path.join(os.path.dirname(__file__), 'out')
+        repo_dir = os.path.join(os.path.dirname(__file__), './')
         repo = git.Repo.init(repo_dir)
         print repo
         repo = git.Repo(repo_dir)
         print repo.git.status()
         # add all files
+        print "here"
         print repo.git.add('*')
-
-        repo = git.Repo('.')
-        print repo.git.status()
-        # checkout and track a remote branch
-        #print repo.git.checkout( 'origin/somebranch', b='somebranch' )
-        # add a file
-        print repo.git.add(all=True)
-
         # commit
+        
         print repo.git.commit(message='Database Dump 2' )
         # now we are one commit ahead
         print repo.git.status()
