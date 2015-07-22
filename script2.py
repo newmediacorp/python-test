@@ -60,19 +60,32 @@ class Database(cmd.Cmd):
         repo_dir = os.path.join(os.path.dirname(__file__), 'out')
         repo = git.Repo.init(repo_dir)
         print repo
+<<<<<<< HEAD
+        repo = git.Repo(repo_dir)
+        print repo.git.status()
+        # add all files
+        print repo.git.add('*')
+=======
         repo = git.Repo('.')
         print repo.git.status()
         # checkout and track a remote branch
         #print repo.git.checkout( 'origin/somebranch', b='somebranch' )
         # add a file
         print repo.git.add(all=True)
+>>>>>>> 7c7bb6b19c81f11b3f33396386a53f77d5005470
         # commit
         print repo.git.commit(message='Database Dump 2' )
         # now we are one commit ahead
         print repo.git.status()
         #finally pushing the code
+<<<<<<< HEAD
+        repo.git.push(repo.head)
+
+        #here is the new change
+=======
         repo.git.push()
         
+>>>>>>> 7c7bb6b19c81f11b3f33396386a53f77d5005470
 
     def do_EOF(self, line):
         return True
