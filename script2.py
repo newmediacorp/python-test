@@ -63,16 +63,12 @@ class Database(cmd.Cmd):
         repo = git.Repo(repo_dir)
         print repo.git.status()
         # add all files
-        print "here"
         print repo.git.add('*')
-        # commit
-        
+        # commit        
         print repo.git.commit(message='Database Dump 2' )
         # now we are one commit ahead
         print repo.git.status()
-        #finally pushing the code
-        repo.git.push(repo.head)
-
+        
         #here is the new change
         repo.git.push()
 
