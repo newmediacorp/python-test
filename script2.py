@@ -4,6 +4,8 @@ import time
 import os
 import subprocess
 import cmd
+import git
+from git import *
 ############# Removing database warnings #############
 from warnings import filterwarnings
 import MySQLdb as Database
@@ -52,15 +54,27 @@ class Database(cmd.Cmd):
         pass
 
     def do_release(self, line):
-        pass
+        repo = Repo('.')
+        tags = repo.tags
+        new_tag = 'my_tag'
+        if new_tag not in tags:
+            repo.create_tag(new_tag, message='V2.0')
+            repo.git.push(tags=True)
+        else:
+            print "Tag already exists with the same name"
 
-    def do_deploy(self, line):
-        import git
+        """Deleting tags"""
+##        for tag in tags:
+##            print tag
+##            tagref = tag.tag
+##            print tagref 
+            #repo.delete_tag(tagref)
 
+    def do_deploy(self, line):        
         repo_dir = os.path.join(os.path.dirname(__file__), './')
         repo = git.Repo.init(repo_dir)
         print repo
-        repo = git.Repo(repo_dir)
+        repo = git.Repo(repo_dir, search_parent_directories=True)
         print repo.git.status()
         # add all files
         print repo.git.add('*')
