@@ -60,7 +60,7 @@ class Database(cmd.Cmd):
         repo_dir = os.path.join(os.path.dirname(__file__), 'out')
         repo = git.Repo.init(repo_dir)
         print repo
-        repo = git.Repo('.')
+        repo = git.Repo(repo_dir)
         print repo.git.status()
         # add all files
         print repo.git.add('*')
