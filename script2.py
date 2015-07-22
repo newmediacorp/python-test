@@ -58,8 +58,8 @@ class Database(cmd.Cmd):
         import git
 
         repo_dir = os.path.join(os.path.dirname(__file__), 'out')
-        #repo = git.Repo.init(repo_dir)
-        
+        repo = git.Repo.init(repo_dir)
+        print repo
         repo = git.Repo('.')
         print repo.git.status()
         # checkout and track a remote branch
