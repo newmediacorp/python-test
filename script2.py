@@ -27,6 +27,9 @@ class Database(cmd.Cmd):
         return cursor.fetchall()
 
     def do_dictionary_to_yaml(self, line):
+        """Invokes get_dictionary for orders table
+            then converts to yaml
+        """
         import yaml
         data = self.get_dictionary()    
         orders_list = []
@@ -38,12 +41,43 @@ class Database(cmd.Cmd):
             d[k] = int(dic[k]) if type(dic[k]) == long else dic[k]
           orders_list.append(d)
 
-    #   Writing output to result.yaml file        
-        with open('./out/orders.yml', 'w') as yaml_file:
+    #   Writing output to result.yaml file
+        directory = './out'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(os.path.join(directory,'orders.yml'), 'w') as yaml_file:
           yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
+
+    def do_build(self, line):
+        pass
+
+    def do_release(self, line):
+        pass
+
+    def do_deploy(self, line):
+        import git
+
+        repo_dir = os.path.join(os.path.dirname(__file__), 'out')
+        repo = git.Repo.init(repo_dir)
+        
+        repo = git.Repo('.')
+        print repo.git.status()
+        # checkout and track a remote branch
+        #print repo.git.checkout( 'origin/somebranch', b='somebranch' )
+        # add a file
+        print repo.git.add(all=True)
+        # commit
+        print repo.git.commit(message='Database Dump 2' )
+        # now we are one commit ahead
+        print repo.git.status()
+        #finally pushing the code
+        repo.push()
+        
 
     def do_EOF(self, line):
         return True
+
+    
 
 def main():
     d = Database()
