@@ -6,6 +6,7 @@ import subprocess
 import cmd
 import git
 from git import *
+
 ############# Removing database warnings #############
 from warnings import filterwarnings
 import MySQLdb as Database
@@ -28,7 +29,7 @@ class Database(cmd.Cmd):
         cursor.execute("SELECT * from {}".format(table))
         return cursor.fetchall()
 
-    def do_dictionary_to_yaml(self, line):
+    def dictionary_to_yaml(self):
         """Invokes get_dictionary for orders table
             then converts to yaml
         """
@@ -43,7 +44,7 @@ class Database(cmd.Cmd):
             d[k] = int(dic[k]) if type(dic[k]) == long else dic[k]
           orders_list.append(d)
 
-    #   Writing output to result.yaml file
+    #   Writing output to orders.yaml file
         directory = './out'
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -51,7 +52,7 @@ class Database(cmd.Cmd):
           yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
 
     def do_build(self, line):
-        pass
+        self.dictionary_to_yaml()
 
     def do_release(self, line):
         repo = Repo('.')
