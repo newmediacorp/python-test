@@ -22,28 +22,20 @@ for page in data['pages'].keys():
     
     sections = data['pages'][page]['sections']
     sections_list = []
-    print page
+
     #section portion
-   
-    for section in sections.keys(): 
-        print section     
+    for section in sections.keys():    
         tags = data['pages'][page]['sections'][section]
-        print tags
-        # Check if collection of html tags in section
         
+        # Check if collection of html tags in section        
         if isinstance(tags, list):            
             for tag in tags:
-                print tag.keys()
-                print tag.values()
-                ui_element_content = tag.values()[0]
-                print ui_element_content
+                ui_element_content = tag.values()[0]                
 
         else: #if no html collection in sections portion
-            print tags.keys()
             section_list_html = []
             for tag in tags.keys():                
                 ui_element_content = data['pages'][page]['sections'][section][tag]
-                print ui_element_content
                 
                 #opening sections portion
                 with open('schemas/section.tpl','r') as sf:
@@ -72,7 +64,7 @@ for page in data['pages'].keys():
                         # print section_html
                         # section_list_html.append(section_html)
                     section_list_html.append(section_html)
-            print section_list_html
+            #print section_list_html
 
     with open('schemas/page.tpl','r') as pf:
         html = pf.read()
