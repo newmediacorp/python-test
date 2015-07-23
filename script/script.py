@@ -1,6 +1,7 @@
 import yaml
 import lxml.html
 import re
+import os
 
 def value_list(x):
     if isinstance(x, dict):
@@ -80,62 +81,11 @@ for page in data['pages'].keys():
         html = re.sub('%%SECTIONS%%',''.join(section_list_html),str(html))
         print html
 
-    with open(str(page)+'.html','w') as pf:
+    directory = 'html'
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    with open(os.path.join(directory, str(page)+'.html'),'w') as pf:
         pf.write(html)
 
-        # print section_list_html
 
-            # with open('schemas/page.tpl','r') as pf:5
-            #     html = pf.read()
-            #     html = re.sub('%%PAGE-TITLE%%',page_title,str(html))
-            #     html = re.sub('%%PAGE-DESCRIPTION%%',page_description,str(html))
-            #     html = re.sub('%%SECTIONS%%',section_html,str(html))
-            #     print html
-
-
-
-##                    print tag_html
-
-
- ##       """For Getting sections with relevant tags"""
-
-        
-##        print tags
-##        for tag in tags.keys():
-##            print tag
-##            ui_element_content = data['pages'][page]['sections'][section][tag]
-##            with open('schemas/'+str(tag)+'.tpl','r') as tf:
-##                tag_html = tf.read()
-##                if tag.lower() == 'p' or tag.lower() == 'h1':
-##                    tag_html = re.sub('%%UI-ELEMENT-CONTENT%%',ui_element_content,str(tag_html))
-####                    print tag_html
-##                    """Replacing section Content """
-##                    section_html = re.sub('%%SECTION-CONTENT%%',tag_html,str(section_html))
-##                    
-##                if tag.lower() == 'button':
-##                    button_type = ui_element_content['type']
-##                    button_css = ui_element_content['css']
-##                    button_type = ui_element_content['name']
-##                    tag_html = re.sub('%%BUTTON-TYPE%%',button_type,str(tag_html))
-##                    tag_html = re.sub('%%BUTTON-CSS%%',button_type,str(tag_html))
-##                    tag_html = re.sub('%%BUTTON-NAME%%',button_type,str(tag_html))
-####                    print tag_html
-##                    """Replacing section Content """
-##                    section_html = re.sub('%%SECTION-CONTENT%%',tag_html,str(section_html))
-##
-##            sections_list.append(section_html)
-####            print ui_element_content
-##            
-##
-##        with open('schemas/page.tpl','r') as pf:
-##            html = pf.read()
-##            html = re.sub('%%PAGE-TITLE%%',page_title,str(html))
-##            html = re.sub('%%PAGE-DESCRIPTION%%',page_description,str(html))
-##            html = re.sub('%%SECTIONS%%',section_html,str(html))
-##            print html
-##
-##            
-##            with open('schemas/'+str(tag)+'.tpl','r') as tf:
-##                tag_html = tf.read() 
-##                tag_html = re.sub('%%UI-ELEMENT-CONTENT%%',ui_element_content,str(tag_html))
-##                print tag_html
