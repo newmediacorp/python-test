@@ -1,0 +1,1 @@
+<div id="%%SECTION-NAME%%">%%SECTION-CONTENT%%</div>

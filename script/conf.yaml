@@ -1,0 +1,38 @@
+%YAML 1.1
+---
+# My Web Site
+web-title: 'My cool web site'
+website-description: 'This is the best site in the world...'
+pages:
+    Home:
+        title: 'Welcome to the Home page'
+        description: 'Description for the Home page'
+        sections:
+            header:
+                h1: 'Welcome to our site!'
+            content:
+                - p: 'This is really long text which explains our products and services...'
+                - button: {'type': 'submit', 'css': 'btn btn-register', 'name': 'Register'}
+                - button: {'type': 'submit', 'css': 'btn btn-delete', 'name': 'Delete'}
+                - button: {'type': 'submit', 'css': 'btn btn-edit', 'name': 'Edit'}
+            footer: 
+                p: 'ACME Ltd. 2014 - All rights reserved.'
+
+    Products:
+        title: 'Our products'
+        description: 'Description for the Products page'
+        sections:
+            header:
+                h1: 'Our products are listed here'
+            content:
+                table:
+                    type: simple
+                    columns: ('Product name', 'Description of product', 'Quantity', 'Price')
+                button: {'type': 'submit', 'css': 'btn btn-success', 'name': 'Register'}
+
+    About-us:
+        title: 'About us'
+        description: 'Description for the About page'
+        sections:
+            content:
+                p: 'Our company is really popular and our products are great....bla bla bla'

@@ -1,0 +1,9 @@
+# get all Pages
+# for each Page open schemas/page.tpl
+# replace %%PAGE-TITLE%% with title:
+# replace %%PAGE-DESCRIPTION%% with description:
+# replace %%SECTIONS%% with each elements under sections:
+# for each element under sections: open schemas/section.tpl
+# replace %%SECTION-NAME%% with section:[section-name]
+# replace %%SECTION-CONTENT%% with all UI elements inside
+# open button.tpl... and so on...

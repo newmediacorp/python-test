@@ -1,0 +1,9 @@
+%%WEB-TITLE%% - web-title: 'My cool web site' (not been used anywhere - is just informational element)
+%%WEBSITE-DESCRIPTION%% - website-description: 'This is the best site in the world...' (not been used anywhere - is just informational element)
+%%PAGE-TITLE%% - title: 'Welcome to the XXXXX page' (Whatever text is in the title: element)
+%%PAGE-DESCRIPTION%% - description: 'The text for description of each page individually'
+%%SECTIONS%% - the contents of section.tpl filled with the respective section name
+%%SECTION-NAME%% - header or content or footer
+%%SECTION-CONTENT%% - the HTML code for ALL UI elements in the respective section
+%%UI-ELEMENT-CONTENT%% - the HTML code for the specific UI element
+
