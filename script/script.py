@@ -15,8 +15,7 @@ def value_list(x):
 stream = open("conf.yaml", 'r')
 data = yaml.load(stream)
 
-##print data['pages'].keys()
-for page in data['pages'].keys():
+for page, v in data['pages'].items():
     page_title = data['pages'][page]['title']
     page_description = data['pages'][page]['description']
     
@@ -24,7 +23,7 @@ for page in data['pages'].keys():
     sections_list = []
 
     #section portion
-    for section in sections.keys():    
+    for section, v in sections.items():    
         tags = data['pages'][page]['sections'][section]
         
         # Check if collection of html tags in section        
@@ -34,7 +33,7 @@ for page in data['pages'].keys():
 
         else: #if no html collection in sections portion
             section_list_html = []
-            for tag in tags.keys():                
+            for tag, v in tags.items():                
                 ui_element_content = data['pages'][page]['sections'][section][tag]
                 
                 #opening sections portion
@@ -61,8 +60,8 @@ for page in data['pages'].keys():
                         tag_html = re.sub('%%BUTTON-NAME%%',button_type,str(tag_html))
                         #"""Replacing section Content """
                         section_html = re.sub('%%SECTION-CONTENT%%',tag_html,str(section_html))
-                        # print section_html
-                        # section_list_html.append(section_html)
+                        
+                        
                     section_list_html.append(section_html)
             #print section_list_html
 
