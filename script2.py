@@ -20,7 +20,10 @@ class Database(cmd.Cmd):
     __port = 3306
     __database = 'pythontest'
     
-
+	"""
+		Function that hits the MySQL database table orders.
+		returns dictionary for all the rows in the table.	
+	"""
     def get_dictionary(self, table='orders'):
         print "in get dictionary"
         import MySQLdb.cursors
@@ -29,31 +32,42 @@ class Database(cmd.Cmd):
         cursor.execute("SELECT * from {}".format(table))
         return cursor.fetchall()
 
-    def dictionary_to_yaml(self):
-        """Invokes get_dictionary for orders table
-            then converts to yaml
-        """
+	"""
+		Invokes get_dictionary() for orders table
+        then converts to yaml
+    """
+    def dictionary_to_yaml(self):        
         import yaml
         data = self.get_dictionary()    
         orders_list = []
-        
+			
     #   Converting values with L(long) from db to int
         for dic in data:
           d = {}
           for k,v in dic.items():                
             d[k] = int(dic[k]) if type(dic[k]) == long else dic[k]
           orders_list.append(d)
-
-    #   Writing output to orders.yaml file
-        directory = './out'
+		
+		"""Checks if the folder ./out already exists.
+		If not creates one.
+		"""
+        directory = './out'		
         if not os.path.exists(directory):
             os.makedirs(directory)
+			
+		#Writing output to orders.yaml file
         with open(os.path.join(directory,'orders.yml'), 'w') as yaml_file:
           yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
 
     def do_build(self, line):
         self.dictionary_to_yaml()
-
+	
+	"""
+		Creates the git tags.
+		Checks if the tag with the same name is already created.
+		If not creates new one with the given name.
+		new_tag = 'tag_name'
+	"""
     def do_release(self, line):
         repo = Repo('.')
         tags = repo.tags
@@ -70,7 +84,13 @@ class Database(cmd.Cmd):
 ##            tagref = tag.tag
 ##            print tagref 
             #repo.delete_tag(tagref)
-
+	"""
+	Function to deploy the code to github. It executes following commands
+	1- git init .
+	2- git add --all
+	3- git commit -m "Database Dump 1"
+	4- git push origin
+	"""	
     def do_deploy(self, line):        
         repo_dir = os.path.join(os.path.dirname(__file__), './')
         repo = git.Repo.init(repo_dir)
