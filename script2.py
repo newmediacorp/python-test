@@ -53,9 +53,9 @@ class Database(cmd.Cmd):
         if not os.path.exists(directory):
             os.makedirs(directory)
 			
-		#Writing output to orders.yaml file
+        #Writing output to orders.yaml file
         with open(os.path.join(directory,'orders.yml'), 'w') as yaml_file:
-          yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
+            yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
 
     def do_build(self, line):
         self.dictionary_to_yaml()
@@ -128,7 +128,3 @@ def main():
 if __name__ == '__main__':
     #main()
     Database().cmdloop()
-
-
-
-
