@@ -16,7 +16,7 @@ filterwarnings('ignore', category = Database.Warning)
 class Database(cmd.Cmd):
     __host = '127.0.0.1'
     __user = 'root'
-    __password = ''
+    __password = '123456'
     __port = 3306
     __database = 'pythontest'
     
