@@ -53,7 +53,7 @@ class Database(cmd.Cmd):
             os.makedirs(directory)
 
         # Writing output to orders.yaml file
-        with open(os.path.join(directory,'orders.yml'), 'w') as yaml_file:
+        with open(os.path.join(directory,'orders.yaml'), 'w') as yaml_file:
             yaml_file.write( yaml.dump(orders_list, default_flow_style=False))
 
     def do_build(self, line):
